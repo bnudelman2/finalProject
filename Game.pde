@@ -47,3 +47,20 @@
       }
     }
   }
+  
+  void keyPressed(){
+    if(key == CODED){
+      if(keyCode == UP){
+        dir = new PVector(0, -1);
+      }
+      else if(keyCode == DOWN){
+        dir = new PVector(0, 1);
+      }
+      else if(keyCode == LEFT){
+        dir = new PVector(-1, 0);
+      }
+      else if(keyCode == RIGHT){
+        dir = new PVector(1, 0);
+      }
+    }
+   }
