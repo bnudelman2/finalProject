@@ -19,7 +19,12 @@
   {new square(32), new square(128) , new square(16) , new square(64)},
   {new square(2048) , new square(1024) , new square(32) , new square(512)}};
     
-    
+    for(int i = 0; i< squares.length; i++){
+       for (int z = 0; z< squares[0].length; z++){
+         System.out.print(squares[i][z].getValue() + " ");
+       }
+       System.out.print(System.lineSeparator());
+    }
     //setup the size of the grid and the colorways
   }
   
@@ -126,7 +131,7 @@
     //we know direction from the class
     if(dir.x == 1){
       for(int i = 0; i < squares.length; i++){
-        for(int z = squares[0].length - 2; squares[i][z] != null && z >= 0; z--){
+        for(int z = squares[0].length - 2; z >= 0 && squares[i][z] != null; z--){
           if(squares[i][z].isTouchingSame(squares[i][z+1])){
             squares[i][z+1].combine(squares[i][z]);
             squares[i][z] = null;
@@ -137,7 +142,7 @@
     }
     else if(dir.x == -1){
       for(int i = 0; i < squares.length; i++){
-        for(int z = 1; squares[i][z] != null && z < squares[0].length; z++){
+        for(int z = 1; z < squares[0].length && squares[i][z] != null; z++){
           if(squares[i][z].isTouchingSame(squares[i][z-1])){
             squares[i][z-1].combine(squares[i][z]);
             squares[i][z] = null;
@@ -145,13 +150,28 @@
           }
         }
       }
-      
     }
     else if(dir.y == 1){
-      
+      for(int i = 0; i < squares[0].length; i++){
+        for(int z = squares.length - 2;z >= 0 && squares[z][i] != null; z--){
+          if(squares[z][i].isTouchingSame(squares[z+1][i])){
+            squares[z+1][i].combine(squares[z][i]);
+            squares[z][i] = null;
+            shiftDown();
+          }
+        }
+      } 
     }
     else if(dir.y == -1){
-      
+      for(int i = 0; i < squares[0].length; i++){
+        for(int z = 1; z < squares.length && squares[z][i] != null; z++){
+          if(squares[z][i].isTouchingSame(squares[z-1][i])){
+            squares[z-1][i].combine(squares[z][i]);
+            squares[z][i] = null;
+            shiftUp();
+          }
+        }
+      } 
     }
   }
   void removeSquare(){
