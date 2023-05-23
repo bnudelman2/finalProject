@@ -1,3 +1,5 @@
+  import java.util.ArrayList;
+  
   square[][] squares;
   String[] mode = new String[]{ "regular", "normal"}; //add more modes
   String[] state = new String[]{ "start", "game", "lose"};
@@ -5,23 +7,35 @@
   String currentState;
   PVector dir; // to keep track of direction to know in which direction to combine squares
   // represents the several possible modes
-  
   void setup(){
     background(#f3f0ed);
     size(800, 800);
     //initial 4x4 grid size
     //squares = new int[4][4];
-    //squares = new square[4][4];
+    squares = new square[4][4];
+    randomSquare(2);
+    randomSquare(2);
     //to test the colors
-    squares = new square[][]
-  {{new square(2),new square(4), new square(8) , new square(32)},
-  {new square(256), new square(0) , new square(32) , new square(4096)},
-  {new square(32), new square(128) , new square(16) , new square(64)},
-  {new square(2048) , new square(1024) , new square(32) , new square(512)}};
+    
+  //  squares = new square[][]
+  //{{new square(2),new square(4), new square(8) , new square(32)},
+  //{new square(256), null , new square(32) , new square(4096)},
+  //{new square(32), new square(128) , new square(16) , new square(64)},
+  //{new square(2048) , new square(1024) , new square(32) , new square(512)}};
+  //squares = new square[][]
+  //{{null,new square(32),new square(32),null},
+  //{null, null , new square(32) , null},
+  //{null,null,new square(32),null},
+  //{null,null,null,null}};
     
     for(int i = 0; i< squares.length; i++){
        for (int z = 0; z< squares[0].length; z++){
+         if (squares[i][z] != null){
          System.out.print(squares[i][z].getValue() + " ");
+         }
+         else{
+           System.out.print("null" + " ");
+         }
        }
        System.out.print(System.lineSeparator());
     }
@@ -33,6 +47,7 @@
   }
   
   void drawSquares(){
+    //IMPORTANT: THIS ONlY WORKS UP TO 4096 SO FAR
     color[] colorSet = new color[]
     {#d6c9bf, #E2D5BD, #EDE0C8, #f2b179, #f59563, #f67c5f, #f65e3b, #edcf72, #edcc61, #edc850, #edc53f, #edc22e, #776365};
     for (int i = 0; i < squares.length; i++){
@@ -51,7 +66,7 @@
           String stringValue = str(squares[i][z].getValue());
           text(stringValue,200 + z*125 - 11*(stringValue.length() - 1) ,225 + i*125);
         }
-        else if (squares[i][z] != null){
+        else {
           fill(colorSet[0]);
           square(150 + z*125, 150 + i*125, 125);
         }
@@ -73,11 +88,30 @@
       shiftUp();
     }
     combineSquares();
+    randomSquare(0);
+    if(checkLoss()) {
+      end Lose = new end();
+      Lose.loss();
+      System.out.println();
+      System.out.println("lost the game");
+    }
+    for(int i = 0; i< squares.length; i++){
+       for (int z = 0; z< squares[0].length; z++){
+         if (squares[i][z] != null){
+         System.out.print(squares[i][z].getValue() + " ");
+         }
+         else{
+           System.out.print("null" + " ");
+         }
+       }
+       System.out.print(System.lineSeparator());
+    }
+    //implement checkLoss
   }
   
   void shiftLeft(){
     for (int i = 0; i < squares.length; i++){
-        for(int z = 1; z <= squares[0].length - 2; z++){
+        for(int z = 1; z <= squares[0].length - 1; z++){
             int x = z;
             while(x > 0 && squares[i][x - 1] == null){
               squares[i][x-1] = squares[i][x];
@@ -103,7 +137,7 @@
   
   void shiftUp(){
     for (int i = 0; i < squares[0].length; i++){
-        for(int z = 1; z <= squares.length - 2; z++){
+        for(int z = 1; z <= squares.length - 1; z++){
             int x = z;
             while(x > 0 && squares[x-1][i] == null){
               squares[x-1][i] = squares[x][i];
@@ -127,6 +161,7 @@
       }
   }
   
+  //IMPORTANT: COMBINESQUARES DOES NOT WORK SOMETIMES WHEN THERE IS ONLY ONE SQUARE LEFT
   void combineSquares(){
     //we know direction from the class
     if(dir.x == 1){
@@ -174,10 +209,78 @@
       } 
     }
   }
-  void removeSquare(){
-    //remove the square from the array
+  void randomSquare(int givenInt){
+    int[] numbers;
+    int randomNumber;
+    if(givenInt == 0){
+      numbers = new int[]{2,4};
+      randomNumber = numbers[(int)(Math.random()*2)];
+    }
+    else randomNumber = givenInt;
+    
+    //find a random open space on the board
+    ArrayList<PVector> openPos = new ArrayList<PVector>();
+    for(int i = 0; i < squares.length; i++){
+      for(int z = 0; z < squares[0].length; z++){
+        if(squares[i][z] == null){
+          openPos.add(new PVector(i,z));
+        }
+      }
+    }
+    if(openPos.size() != 0){
+      PVector randomSpot = openPos.get((int)(Math.random() * openPos.size()));
+      squares[(int)randomSpot.x][(int)randomSpot.y] = new square(randomNumber);
+    }
   }
   
+  boolean checkLoss(){
+    boolean notLoss = false;
+    while(!notLoss){
+      for(int i = 0; i < squares.length; i++){
+        for(int z = 0; z < squares[0].length; z++){
+          //check all four directions
+          if (squares[i][z] != null){
+            if( i - 1 >= 0){
+              if(squares[i-1][z] != null){
+                notLoss = notLoss || squares[i][z].isTouchingSame(squares[i-1][z]);
+              }
+              else{
+                notLoss = true;
+              }
+            }
+            if( i + 1 < squares.length) 
+              if(squares[i+1][z] != null){
+                notLoss = notLoss || squares[i][z].isTouchingSame(squares[i+1][z]);
+              }
+              else{
+                notLoss = true;
+              }
+            if( z - 1 >= 0){
+              if(squares[i][z-1] != null){
+                notLoss = notLoss || squares[i][z].isTouchingSame(squares[i][z - 1]);
+              }
+              else{
+                notLoss = true;
+              }
+            }
+            if(z + 1 < squares[0].length){
+              if(squares[i][z + 1] != null){
+                notLoss = notLoss || squares[i][z].isTouchingSame(squares[i][z + 1]);
+              }
+              else{
+                notLoss = true;
+              }
+            }
+          }
+          else{
+            notLoss = true;
+          }
+          
+        }
+      }
+    }
+    return !notLoss;
+  }
   void keyPressed(){
     if(key == CODED){
       if(keyCode == UP){
@@ -196,5 +299,6 @@
         dir = new PVector(1, 0);
         postMove();
       }
+      //call the random square after every move, and also implement a check to see if the game is over
     }
    }

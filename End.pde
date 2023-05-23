@@ -10,7 +10,7 @@ class end {
   }
   //void win(){}
   
-  //void loss(){}
+  void loss(){}
   
   void reset(){
     ms = 0;
