@@ -1,5 +1,6 @@
   import java.util.ArrayList;
-  
+  //add variable to keep track of which screen to start on, use start boolean for setyp or use ints
+  //IMPORTANT: THE CODE BREAKS WHEN THE MOVE WORKS IN ONLY ONE DIRECTION AND YOU MOVE IN THE WRONG DIRECTION
   square[][] squares;
   String[] mode = new String[]{ "regular", "normal"}; //add more modes
   String[] state = new String[]{ "start", "game", "lose"};
@@ -89,12 +90,6 @@
     }
     combineSquares();
     randomSquare(0);
-    if(checkLoss()) {
-      end Lose = new end();
-      Lose.loss();
-      System.out.println();
-      System.out.println("lost the game");
-    }
     for(int i = 0; i< squares.length; i++){
        for (int z = 0; z< squares[0].length; z++){
          if (squares[i][z] != null){
@@ -106,6 +101,23 @@
        }
        System.out.print(System.lineSeparator());
     }
+    if(checkLoss()) {
+      //end Lose = new end();
+      //Lose.loss();
+      System.out.println();
+      System.out.println("lost the game");
+    }
+    //for(int i = 0; i< squares.length; i++){
+    //   for (int z = 0; z< squares[0].length; z++){
+    //     if (squares[i][z] != null){
+    //     System.out.print(squares[i][z].getValue() + " ");
+    //     }
+    //     else{
+    //       System.out.print("null" + " ");
+    //     }
+    //   }
+    //   System.out.print(System.lineSeparator());
+    //}
     //implement checkLoss
   }
   
@@ -126,7 +138,7 @@
     for (int i = 0; i < squares.length; i++){
         for(int z = squares[0].length - 2; z >= 0; z--){
             int x = z;
-            while(x < squares.length -1 && squares[i][x + 1] == null){
+            while(x < squares[0].length -1 && squares[i][x + 1] == null){
               squares[i][x+1] = squares[i][x];
               squares[i][x] = null;
               x++;
@@ -152,7 +164,7 @@
     for (int i = 0; i < squares[0].length; i++){
         for(int z = squares.length - 2; z >= 0; z--){
             int x = z;
-            while(x < squares[0].length - 1 && squares[x+1][i] == null){
+            while(x < squares.length - 1 && squares[x+1][i] == null){
               squares[x+1][i] = squares[x][i];
               squares[x][i] = null;
               x++;
@@ -161,7 +173,6 @@
       }
   }
   
-  //IMPORTANT: COMBINESQUARES DOES NOT WORK SOMETIMES WHEN THERE IS ONLY ONE SQUARE LEFT
   void combineSquares(){
     //we know direction from the class
     if(dir.x == 1){
@@ -213,7 +224,7 @@
     int[] numbers;
     int randomNumber;
     if(givenInt == 0){
-      numbers = new int[]{2,4};
+      numbers = new int[]{2,2,4};
       randomNumber = numbers[(int)(Math.random()*2)];
     }
     else randomNumber = givenInt;
@@ -233,8 +244,10 @@
     }
   }
   
+  //checkloss does not work as intended
   boolean checkLoss(){
-    boolean notLoss = false;
+    System.out.println("CHECKED FOR LOSS");
+    boolean notLoss = false; //actually represents loss
     while(!notLoss){
       for(int i = 0; i < squares.length; i++){
         for(int z = 0; z < squares[0].length; z++){
@@ -275,11 +288,11 @@
           else{
             notLoss = true;
           }
-          
         }
       }
     }
-    return !notLoss;
+    System.out.println(notLoss);
+    return !(notLoss);
   }
   void keyPressed(){
     if(key == CODED){
@@ -299,6 +312,5 @@
         dir = new PVector(1, 0);
         postMove();
       }
-      //call the random square after every move, and also implement a check to see if the game is over
     }
    }
