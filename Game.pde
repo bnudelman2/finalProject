@@ -341,6 +341,7 @@
    void mouseClicked(){
      if(currentState.equals("start") && ((mouseX >= 275 && mouseX <= 525) && (mouseY >= 575 && mouseY <= 650))){
        currentState = "game";
+       file.stop();
      }
      
    }
