@@ -1,16 +1,21 @@
+ //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
   import java.util.ArrayList;
+  import processing.sound.*;
   //add variable to keep track of which screen to start on, use start boolean for setyp or use ints
-  //IMPORTANT: THE CODE BREAKS WHEN THE MOVE WORKS IN ONLY ONE DIRECTION AND YOU MOVE IN THE WRONG DIRECTION
   square[][] squares;
   String[] mode = new String[]{ "regular", "normal"}; //add more modes
   String[] state = new String[]{ "start", "game", "lose"};
   String currentMode;
-  String currentState;
+  String currentState = state[0];
+  SoundFile file;
+  //public boolean isLoop = false;
   PVector dir; // to keep track of direction to know in which direction to combine squares
   // represents the several possible modes
   void setup(){
-    background(#f3f0ed);
     size(800, 800);
+    file = new SoundFile(this, "intro.mp3");
+    file.loop();
+    //file.playFor(100.0);
     //initial 4x4 grid size
     squares = new square[4][4];
     randomSquare(2);
@@ -40,12 +45,53 @@
     //   System.out.print(System.lineSeparator());
     //}
     //setup the size of the grid and the colorways
+    
   }
   
   void draw(){
-    drawSquares();
+    if(currentState.equals("start")){
+      drawStartScreen();
+    }
+    else if(currentState.equals("game")){
+      background(#f3f0ed);
+      drawSquares();
+    }
+    else if(currentState.equals("end")){
+      //end screen
+    }
+    //if(isLoop){
+    //  System.out.print("noloop");
+    //}
   }
   
+  void drawStartScreen(){
+    PImage bkg = loadImage("background.jpeg");
+    background(bkg);
+    String[] numbers = new String[]{"4", "0", "9", "6"};
+    color[] colors = new color[]{#25FF2A, #25FFF5, #FF5F1F, #9D00FF};
+    PFont font;
+    font = loadFont("Skia-Regular_Bold-48.vlw");
+    for(int i = 0; i < 4; i++){
+      stroke(#3B3334);
+      strokeCap(ROUND);
+      strokeJoin(ROUND);
+      strokeWeight(10);
+      fill(colors[i]);
+      square(170+120*i,100,100);
+      textFont(font, 90);
+      fill(255,255,255);
+      text(numbers[i], 192 + 120*i , 175);
+    }
+    stroke(#FFFF33);
+    strokeCap(ROUND);
+    strokeJoin(ROUND);
+    strokeWeight(20);
+    fill(#FFFF33);
+    rect(275,575,250,75);
+    textFont(font,75);
+    fill(0,0,0);
+    text("START", 282, 638);
+  }
   void drawSquares(){
     //IMPORTANT: THIS ONlY WORKS UP TO 4096 SO FAR
     color[] colorSet = new color[]
@@ -109,7 +155,7 @@
             }
         }
       }
-  } //<>//
+  }
   
   void shiftRight(){
     for (int i = 0; i < squares.length; i++){
@@ -122,7 +168,7 @@
             }
         }
       }
-  } //<>//
+  }
   
   void shiftUp(){
     for (int i = 0; i < squares[0].length; i++){
@@ -135,7 +181,7 @@
             }
         }
       }
-  } //<>//
+  }
   
   void shiftDown(){
     for (int i = 0; i < squares[0].length; i++){
@@ -148,7 +194,7 @@
             }
         }
       }
-  } //<>//
+  }
   
   void combineSquares(){
     //we know direction from the class
@@ -162,7 +208,7 @@
           }
         }
       }
-    } //<>//
+    }
     else if(dir.x == -1){
       for(int i = 0; i < squares.length; i++){
         for(int z = 1; z < squares[0].length && squares[i][z] != null; z++){
@@ -184,7 +230,7 @@
           }
         }
       } 
-    } //<>//
+    }
     else if(dir.y == -1){
       for(int i = 0; i < squares[0].length; i++){
         for(int z = 1; z < squares.length && squares[z][i] != null; z++){
@@ -196,14 +242,14 @@
         }
       } 
     }
-  } //<>//
+  }
   void randomSquare(int givenInt){
     int[] numbers;
     int randomNumber;
     if(givenInt == 0){
-      numbers = new int[]{2,2,4};
-      randomNumber = numbers[(int)(Math.random()*3)];
-    } //<>//
+      numbers = new int[]{2,2,4,2};
+      randomNumber = numbers[(int)(Math.random()*4)];
+    }
     else randomNumber = givenInt;
     
     //find a random open space on the board
@@ -268,7 +314,7 @@
         }
       }
       doneChecking = true;
-    } //<>// //<>//
+    }
     return !(notLoss);
   }
   void keyPressed(){
@@ -276,18 +322,25 @@
       if(keyCode == UP){
         dir = new PVector(0, -1);
         postMove();
-      } //<>//
+      }
       else if(keyCode == DOWN){
         dir = new PVector(0, 1);
         postMove();
-      } //<>//
+      }
       else if(keyCode == LEFT){
         dir = new PVector(-1, 0);
         postMove();
-      } //<>//
+      }
       else if(keyCode == RIGHT){
         dir = new PVector(1, 0);
         postMove();
-      } //<>//
+      }
     }
+   }
+   
+   void mouseClicked(){
+     if(currentState.equals("start") && ((mouseX >= 275 && mouseX <= 525) && (mouseY >= 575 && mouseY <= 650))){
+       currentState = "game";
+     }
+     
    }
