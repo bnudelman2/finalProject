@@ -12,7 +12,6 @@
     background(#f3f0ed);
     size(800, 800);
     //initial 4x4 grid size
-    //squares = new int[4][4];
     squares = new square[4][4];
     randomSquare(2);
     randomSquare(2);
@@ -29,17 +28,17 @@
   //{null,null,new square(32),null},
   //{null,null,null,null}};
     
-    for(int i = 0; i< squares.length; i++){
-       for (int z = 0; z< squares[0].length; z++){
-         if (squares[i][z] != null){
-         System.out.print(squares[i][z].getValue() + " ");
-         }
-         else{
-           System.out.print("null" + " ");
-         }
-       }
-       System.out.print(System.lineSeparator());
-    }
+    //for(int i = 0; i< squares.length; i++){
+    //   for (int z = 0; z< squares[0].length; z++){
+    //     if (squares[i][z] != null){
+    //     System.out.print(squares[i][z].getValue() + " ");
+    //     }
+    //     else{
+    //       System.out.print("null" + " ");
+    //     }
+    //   }
+    //   System.out.print(System.lineSeparator());
+    //}
     //setup the size of the grid and the colorways
   }
   
@@ -58,7 +57,7 @@
         strokeJoin(ROUND);
         strokeWeight(10);
         if (squares[i][z] != null && squares[i][z].getValue() != 0){
-          fill(colorSet[(int)(log(squares[i][z].getValue()) / log(2))] - 1);
+          fill(colorSet[(int)(log(squares[i][z].getValue()) / log(2))] );
           square(150 + z*125, 150 + i*125, 125);
           PFont font;
           font = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
@@ -90,35 +89,13 @@
     }
     combineSquares();
     randomSquare(0);
-    for(int i = 0; i< squares.length; i++){
-       for (int z = 0; z< squares[0].length; z++){
-         if (squares[i][z] != null){
-         System.out.print(squares[i][z].getValue() + " ");
-         }
-         else{
-           System.out.print("null" + " ");
-         }
-       }
-       System.out.print(System.lineSeparator());
-    }
+    
     if(checkLoss()) {
       //end Lose = new end();
       //Lose.loss();
       System.out.println();
       System.out.println("lost the game");
     }
-    //for(int i = 0; i< squares.length; i++){
-    //   for (int z = 0; z< squares[0].length; z++){
-    //     if (squares[i][z] != null){
-    //     System.out.print(squares[i][z].getValue() + " ");
-    //     }
-    //     else{
-    //       System.out.print("null" + " ");
-    //     }
-    //   }
-    //   System.out.print(System.lineSeparator());
-    //}
-    //implement checkLoss
   }
   
   void shiftLeft(){
@@ -132,7 +109,7 @@
             }
         }
       }
-  }
+  } //<>//
   
   void shiftRight(){
     for (int i = 0; i < squares.length; i++){
@@ -145,7 +122,7 @@
             }
         }
       }
-  }
+  } //<>//
   
   void shiftUp(){
     for (int i = 0; i < squares[0].length; i++){
@@ -158,7 +135,7 @@
             }
         }
       }
-  }
+  } //<>//
   
   void shiftDown(){
     for (int i = 0; i < squares[0].length; i++){
@@ -171,7 +148,7 @@
             }
         }
       }
-  }
+  } //<>//
   
   void combineSquares(){
     //we know direction from the class
@@ -185,7 +162,7 @@
           }
         }
       }
-    }
+    } //<>//
     else if(dir.x == -1){
       for(int i = 0; i < squares.length; i++){
         for(int z = 1; z < squares[0].length && squares[i][z] != null; z++){
@@ -207,7 +184,7 @@
           }
         }
       } 
-    }
+    } //<>//
     else if(dir.y == -1){
       for(int i = 0; i < squares[0].length; i++){
         for(int z = 1; z < squares.length && squares[z][i] != null; z++){
@@ -219,14 +196,14 @@
         }
       } 
     }
-  }
+  } //<>//
   void randomSquare(int givenInt){
     int[] numbers;
     int randomNumber;
     if(givenInt == 0){
       numbers = new int[]{2,2,4};
-      randomNumber = numbers[(int)(Math.random()*2)];
-    }
+      randomNumber = numbers[(int)(Math.random()*3)];
+    } //<>//
     else randomNumber = givenInt;
     
     //find a random open space on the board
@@ -244,11 +221,10 @@
     }
   }
   
-  //checkloss does not work as intended
   boolean checkLoss(){
-    System.out.println("CHECKED FOR LOSS");
     boolean notLoss = false; //actually represents loss
-    while(!notLoss){
+    boolean doneChecking = false;
+    while(!notLoss && !doneChecking){
       for(int i = 0; i < squares.length; i++){
         for(int z = 0; z < squares[0].length; z++){
           //check all four directions
@@ -261,13 +237,14 @@
                 notLoss = true;
               }
             }
-            if( i + 1 < squares.length) 
+            if( i + 1 < squares.length){
               if(squares[i+1][z] != null){
                 notLoss = notLoss || squares[i][z].isTouchingSame(squares[i+1][z]);
               }
               else{
                 notLoss = true;
               }
+            }
             if( z - 1 >= 0){
               if(squares[i][z-1] != null){
                 notLoss = notLoss || squares[i][z].isTouchingSame(squares[i][z - 1]);
@@ -290,8 +267,8 @@
           }
         }
       }
-    }
-    System.out.println(notLoss);
+      doneChecking = true;
+    } //<>// //<>//
     return !(notLoss);
   }
   void keyPressed(){
@@ -299,18 +276,18 @@
       if(keyCode == UP){
         dir = new PVector(0, -1);
         postMove();
-      }
+      } //<>//
       else if(keyCode == DOWN){
         dir = new PVector(0, 1);
         postMove();
-      }
+      } //<>//
       else if(keyCode == LEFT){
         dir = new PVector(-1, 0);
         postMove();
-      }
+      } //<>//
       else if(keyCode == RIGHT){
         dir = new PVector(1, 0);
         postMove();
-      }
+      } //<>//
     }
    }
