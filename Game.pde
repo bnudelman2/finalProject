@@ -1,16 +1,17 @@
- //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
-  import java.util.ArrayList;
+  import java.util.ArrayList;  //<>//
   import processing.sound.*;
-  //add variable to keep track of which screen to start on, use start boolean for setyp or use ints
   square[][] squares;
   String[] mode = new String[]{ "regular", "normal"}; //add more modes
   String[] state = new String[]{ "start", "game", "lose"};
   String currentMode;
-  String currentState = state[0];
+  String currentState = state[2];
   SoundFile file;
   //public boolean isLoop = false;
   PVector dir; // to keep track of direction to know in which direction to combine squares
-  // represents the several possible modes
+  //represents the several possible modes
+  //PUT START AND END IN SEPARATE CLASSES and make non-draw methods that invoke a draw function like rect
+  //ADD A RULES PAGE IN THE START MENU AS WELL
+  //IMPLEMENT TIMED MODE WHERE YOU HAVE A CERTAIN TIME TO REACH A CERTAIN SCORE AND ALSO IMPLEMENT A LEVEL PAGE TO CHOOSE THOSE TIMES OR A TIME CHOOSING OPTION
   void setup(){
     size(800, 800);
     file = new SoundFile(this, "intro.mp3");
@@ -20,32 +21,6 @@
     squares = new square[4][4];
     randomSquare(2);
     randomSquare(2);
-    //to test the colors
-    
-  //  squares = new square[][]
-  //{{new square(2),new square(4), new square(8) , new square(32)},
-  //{new square(256), null , new square(32) , new square(4096)},
-  //{new square(32), new square(128) , new square(16) , new square(64)},
-  //{new square(2048) , new square(1024) , new square(32) , new square(512)}};
-  //squares = new square[][]
-  //{{null,new square(32),new square(32),null},
-  //{null, null , new square(32) , null},
-  //{null,null,new square(32),null},
-  //{null,null,null,null}};
-    
-    //for(int i = 0; i< squares.length; i++){
-    //   for (int z = 0; z< squares[0].length; z++){
-    //     if (squares[i][z] != null){
-    //     System.out.print(squares[i][z].getValue() + " ");
-    //     }
-    //     else{
-    //       System.out.print("null" + " ");
-    //     }
-    //   }
-    //   System.out.print(System.lineSeparator());
-    //}
-    //setup the size of the grid and the colorways
-    
   }
   
   void draw(){
@@ -56,8 +31,8 @@
       background(#f3f0ed);
       drawSquares();
     }
-    else if(currentState.equals("end")){
-      //end screen
+    else if(currentState.equals("lose")){
+      drawEndScreen();
     }
     //if(isLoop){
     //  System.out.print("noloop");
@@ -91,6 +66,24 @@
     textFont(font,75);
     fill(0,0,0);
     text("START", 282, 638);
+  }
+  void drawEndScreen(){
+    //ADD A "YOUR SCORE: X" at the top
+    //ADD a loss noise
+    //CHANGE BACKGROUND IMAGE
+    PImage bkg = loadImage("gameOver.jpeg");
+    background(bkg);
+    PFont font;
+    font = loadFont("Skia-Regular_Bold-48.vlw");
+    stroke(#FFFF33);
+    strokeCap(ROUND);
+    strokeJoin(ROUND);
+    strokeWeight(20);
+    fill(#FFFF33);
+    rect(225,575,350,75);
+    textFont(font,75);
+    fill(0,0,0);
+    text("Try Again", 230, 638);
   }
   void drawSquares(){
     //IMPORTANT: THIS ONlY WORKS UP TO 4096 SO FAR
@@ -137,10 +130,7 @@
     randomSquare(0);
     
     if(checkLoss()) {
-      //end Lose = new end();
-      //Lose.loss();
-      System.out.println();
-      System.out.println("lost the game");
+      currentState = "lose";
     }
   }
   
@@ -343,5 +333,9 @@
        currentState = "game";
        file.stop();
      }
-     
+     if(currentState.equals("lose") && ((mouseX >= 275 && mouseX <= 525) && (mouseY >= 575 && mouseY <= 650))){
+       currentState = "start";
+       file.play();
+     }
+     //add more for when other modes are in play if needed, as needed
    }
