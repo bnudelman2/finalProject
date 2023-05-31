@@ -4,14 +4,14 @@
   String[] mode = new String[]{ "regular", "normal"}; //add more modes
   String[] state = new String[]{ "start", "game", "lose"};
   String currentMode;
-  String currentState = state[2];
+  String currentState = state[0];
   SoundFile file;
   //public boolean isLoop = false;
   PVector dir; // to keep track of direction to know in which direction to combine squares
   //represents the several possible modes
   //PUT START AND END IN SEPARATE CLASSES and make non-draw methods that invoke a draw function like rect
   //ADD A RULES PAGE IN THE START MENU AS WELL
-  //IMPLEMENT TIMED MODE WHERE YOU HAVE A CERTAIN TIME TO REACH A CERTAIN SCORE AND ALSO IMPLEMENT A LEVEL PAGE TO CHOOSE THOSE TIMES OR A TIME CHOOSING OPTION
+  //IMPLEMENT TIMED MODE WHERE YOU HAVE A CERTAIN TIME TO REACH A CERTAIN SCwORE AND ALSO IMPLEMENT A LEVEL PAGE TO CHOOSE THOSE TIMES OR A TIME CHOOSING OPTION
   void setup(){
     size(800, 800);
     file = new SoundFile(this, "intro.mp3");
@@ -80,10 +80,10 @@
     strokeJoin(ROUND);
     strokeWeight(20);
     fill(#FFFF33);
-    rect(225,575,350,75);
+    rect(225,650,350,75);
     textFont(font,75);
     fill(0,0,0);
-    text("Try Again", 230, 638);
+    text("Try Again", 230, 713);
   }
   void drawSquares(){
     //IMPORTANT: THIS ONlY WORKS UP TO 4096 SO FAR
@@ -333,7 +333,7 @@
        currentState = "game";
        file.stop();
      }
-     if(currentState.equals("lose") && ((mouseX >= 275 && mouseX <= 525) && (mouseY >= 575 && mouseY <= 650))){
+     if(currentState.equals("lose") && ((mouseX >= 275 && mouseX <= 525) && (mouseY >= 650 && mouseY <= 725))){
        currentState = "start";
        file.play();
      }
