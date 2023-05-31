@@ -8,6 +8,7 @@ class square{
   }
   void combine(square second){
     value += second.getValue();
+    score += value;
   }
   boolean isTouchingSame(square second){
     return second.getValue() == value;

@@ -6,12 +6,13 @@
   String currentMode;
   String currentState = state[0];
   SoundFile file;
-  //public boolean isLoop = false;
   PVector dir; // to keep track of direction to know in which direction to combine squares
+  public int score = 0;
   //represents the several possible modes
   //PUT START AND END IN SEPARATE CLASSES and make non-draw methods that invoke a draw function like rect
   //ADD A RULES PAGE IN THE START MENU AS WELL
   //IMPLEMENT TIMED MODE WHERE YOU HAVE A CERTAIN TIME TO REACH A CERTAIN SCwORE AND ALSO IMPLEMENT A LEVEL PAGE TO CHOOSE THOSE TIMES OR A TIME CHOOSING OPTION
+  //add a reset method for when "try again" is clicked
   void setup(){
     size(800, 800);
     file = new SoundFile(this, "intro.mp3");
@@ -30,6 +31,7 @@
     else if(currentState.equals("game")){
       background(#f3f0ed);
       drawSquares();
+      System.out.println(score);
     }
     else if(currentState.equals("lose")){
       drawEndScreen();
