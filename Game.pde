@@ -32,6 +32,7 @@
       background(#f3f0ed);
       drawSquares();
       System.out.println(score);
+      drawScore();
     }
     else if(currentState.equals("lose")){
       drawEndScreen();
@@ -112,6 +113,23 @@
           square(150 + z*125, 150 + i*125, 125);
         }
       }
+    }
+  }
+  
+  void drawScore(){
+    fill(#d6c9bf);
+    rect(500, 40, 250, 75);
+    PFont font;
+    font = loadFont("Skia-Regular_Bold-48.vlw");
+    textFont(font, 60);
+    text("SCORE", 300, 100);
+    font = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
+    fill(#3B3334);
+    if(score == 0){
+      text(score, 610, 90);
+    }
+    else{
+      text(score, 610 - 15 * (int)(log(score) / log(10)), 90);
     }
   }
   
