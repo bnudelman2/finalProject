@@ -327,6 +327,13 @@
     }
     return !(notLoss);
   }
+  
+  void reset(){
+    score = 0;
+    squares = new square[4][4];
+    randomSquare(2);
+    randomSquare(2);
+  }
   void keyPressed(){
     if(key == CODED){
       if(keyCode == UP){
@@ -354,6 +361,7 @@
        file.stop();
      }
      if(currentState.equals("lose") && ((mouseX >= 275 && mouseX <= 525) && (mouseY >= 650 && mouseY <= 725))){
+       reset();
        currentState = "start";
        file.play();
      }
