@@ -8,10 +8,11 @@
   SoundFile file;
   PVector dir; // to keep track of direction to know in which direction to combine squares
   public int score = 0;
+  int bestScore = 0;
   //represents the several possible modes
   //PUT START AND END IN SEPARATE CLASSES and make non-draw methods that invoke a draw function like rect
   //ADD A RULES PAGE IN THE START MENU AS WELL
-  //IMPLEMENT TIMED MODE WHERE YOU HAVE A CERTAIN TIME TO REACH A CERTAIN SCwORE AND ALSO IMPLEMENT A LEVEL PAGE TO CHOOSE THOSE TIMES OR A TIME CHOOSING OPTION
+  //IMPLEMENT TIMED MODE (with a separate timer class) WHERE YOU HAVE A CERTAIN TIME TO REACH A CERTAIN SCwORE AND ALSO IMPLEMENT A LEVEL PAGE TO CHOOSE THOSE TIMES OR A TIME CHOOSING OPTION
   //add a reset method for when "try again" is clicked
   void setup(){
     size(800, 800);
@@ -31,7 +32,6 @@
     else if(currentState.equals("game")){
       background(#f3f0ed);
       drawSquares();
-      System.out.println(score);
       drawScore();
     }
     else if(currentState.equals("lose")){
@@ -71,7 +71,7 @@
     text("START", 282, 638);
   }
   void drawEndScreen(){
-    //ADD A "YOUR SCORE: X" at the top
+    //ADD A "YOUR SCORE: X" at the top and Best score both here and in game
     //ADD a loss noise
     //CHANGE BACKGROUND IMAGE
     PImage bkg = loadImage("gameOver.jpeg");
@@ -118,18 +118,32 @@
   
   void drawScore(){
     fill(#d6c9bf);
-    rect(500, 40, 250, 75);
+    rect(615, 30, 150, 45);
     PFont font;
     font = loadFont("Skia-Regular_Bold-48.vlw");
-    textFont(font, 60);
-    text("SCORE", 300, 100);
+    textFont(font, 40);
+    text("SCORE", 475, 65);
     font = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
     fill(#3B3334);
     if(score == 0){
-      text(score, 610, 90);
+      text(score, 678, 61);
     }
     else{
-      text(score, 610 - 15 * (int)(log(score) / log(10)), 90);
+      text(score, 678 - 11.5 * (int)(log(score) / log(10)), 61);
+    }
+    
+    fill(#d6c9bf);
+    rect(143, 30, 150, 45);
+    font = loadFont("Skia-Regular_Bold-48.vlw");
+    textFont(font, 40);
+    text("BEST", 30, 65);
+    font = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
+    fill(#3B3334);
+    if(bestScore == 0){
+      text(bestScore, 206, 61);
+    }
+    else{
+      text(bestScore, 206 - 11.5 * (int)(log(bestScore) / log(10)), 61);
     }
   }
   
@@ -150,6 +164,10 @@
     randomSquare(0);
     
     if(checkLoss()) {
+      //int currentTime = millis();
+      //while(millis() - currentTime < 5000){
+      //}
+      //make it display lost configuration before loss, fix bug
       currentState = "lose";
     }
   }
@@ -329,11 +347,15 @@
   }
   
   void reset(){
+    if(score > bestScore){
+      bestScore = score;
+    }
     score = 0;
     squares = new square[4][4];
     randomSquare(2);
     randomSquare(2);
   }
+  
   void keyPressed(){
     if(key == CODED){
       if(keyCode == UP){
