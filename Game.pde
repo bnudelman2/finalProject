@@ -9,6 +9,10 @@
   PVector dir; // to keep track of direction to know in which direction to combine squares
   public int score = 0;
   int bestScore = 0;
+  int startTime = 0;
+  int currentBarrierTime = 1000;
+  int currentTime = 0;
+  int lossTime = 0;
   //represents the several possible modes
   //PUT START AND END IN SEPARATE CLASSES and make non-draw methods that invoke a draw function like rect
   //ADD A RULES PAGE IN THE START MENU AS WELL
@@ -33,6 +37,7 @@
       background(#f3f0ed);
       drawSquares();
       drawScore();
+      drawTime();
     }
     else if(currentState.equals("lose")){
       drawEndScreen();
@@ -147,6 +152,18 @@
     }
   }
   
+  void drawTime(){
+    int time = millis() - startTime;
+    if (time > currentBarrierTime){
+      currentTime = currentBarrierTime / 1000;
+      System.out.println(currentTime);
+      currentBarrierTime += 1000;
+    }
+    //if(time % 1000 == 0){
+      //System.out.println(time );
+    //}
+  }
+  
   void postMove(){
     if(dir.x == 1){
       shiftRight();
@@ -168,6 +185,7 @@
       //while(millis() - currentTime < 5000){
       //}
       //make it display lost configuration before loss, fix bug
+      lossTime = currentTime;
       currentState = "lose";
     }
   }
@@ -351,6 +369,7 @@
       bestScore = score;
     }
     score = 0;
+    currentBarrierTime = 1000;
     squares = new square[4][4];
     randomSquare(2);
     randomSquare(2);
@@ -381,6 +400,7 @@
      if(currentState.equals("start") && ((mouseX >= 275 && mouseX <= 525) && (mouseY >= 575 && mouseY <= 650))){
        currentState = "game";
        file.stop();
+       startTime = millis();
      }
      if(currentState.equals("lose") && ((mouseX >= 275 && mouseX <= 525) && (mouseY >= 650 && mouseY <= 725))){
        reset();
