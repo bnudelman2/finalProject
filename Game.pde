@@ -4,7 +4,7 @@
   String[] mode = new String[]{ "regular", "normal"}; //add more modes
   String[] state = new String[]{ "start", "game", "lose"};
   String currentMode;
-  String currentState = state[0];
+  String currentState = state[1];
   SoundFile file;
   PVector dir; // to keep track of direction to know in which direction to combine squares
   public int score = 0;
@@ -75,6 +75,7 @@
     fill(0,0,0);
     text("START", 282, 638);
   }
+  
   void drawEndScreen(){
     //ADD A "YOUR SCORE: X" at the top and Best score both here and in game
     //ADD a loss noise
@@ -93,6 +94,7 @@
     fill(0,0,0);
     text("Try Again", 230, 713);
   }
+  
   void drawSquares(){
     //IMPORTANT: THIS ONlY WORKS UP TO 4096 SO FAR
     color[] colorSet = new color[]
@@ -154,14 +156,26 @@
   
   void drawTime(){
     int time = millis() - startTime;
+    fill(#d6c9bf);
+    rect(420, 675, 200, 75);
+    fill(#3B3334);
+    PFont font;
+    font = loadFont("Skia-Regular_Bold-48.vlw");
+    textFont(font, 60);
+    text("TIME", 255, 730);
+    font = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
+    fill(#3B3334);
     if (time > currentBarrierTime){
       currentTime = currentBarrierTime / 1000;
-      System.out.println(currentTime);
       currentBarrierTime += 1000;
     }
-    //if(time % 1000 == 0){
-      //System.out.println(time );
-    //}
+    if(currentBarrierTime == 1000){
+      text("0", 500, 730);
+    }
+    else{
+      text(currentTime, 500 - 11.5 * (int)(log(currentTime) / log(10)), 730);
+    }
+    //make sure it works for when it is played multiple times, and make sure lossTime works as well
   }
   
   void postMove(){
