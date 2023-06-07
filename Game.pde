@@ -1,10 +1,10 @@
   import java.util.ArrayList;  //<>//
   import processing.sound.*;
   square[][] squares;
-  String[] mode = new String[]{ "regular", "normal"}; //add more modes
-  String[] state = new String[]{ "start", "game", "lose"};
-  String currentMode;
-  String currentState = state[1];
+  //String[] mode = new String[]{ "regular", "normal"}; //add more modes
+  String[] state = new String[]{ "start", "settings", "game", "lose"};
+  //String currentMode;
+  String currentState = state[0];
   SoundFile file;
   PVector dir; // to keep track of direction to know in which direction to combine squares
   public int score = 0;
@@ -74,6 +74,11 @@
     textFont(font,75);
     fill(0,0,0);
     text("START", 282, 638);
+    PImage settingsIcon = loadImage("settings.png");
+    fill(255,255,255);
+    strokeWeight(10);
+    rect(700,25,75,75);
+    image(settingsIcon, 700, 25, 75, 75); //change size and location
   }
   
   void drawEndScreen(){
@@ -157,12 +162,12 @@
   void drawTime(){
     int time = millis() - startTime;
     fill(#d6c9bf);
-    rect(420, 675, 200, 75);
+    rect(385, 675, 200, 75);
     fill(#3B3334);
     PFont font;
     font = loadFont("Skia-Regular_Bold-48.vlw");
     textFont(font, 60);
-    text("TIME", 255, 730);
+    text("TIME", 220, 730);
     font = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
     fill(#3B3334);
     if (time > currentBarrierTime){
@@ -170,10 +175,10 @@
       currentBarrierTime += 1000;
     }
     if(currentBarrierTime == 1000){
-      text("0", 500, 730);
+      text("0", 465, 730);
     }
     else{
-      text(currentTime, 500 - 11.5 * (int)(log(currentTime) / log(10)), 730);
+      text(currentTime, 465 - 11.5 * (int)(log(currentTime) / log(10)), 730);
     }
     //make sure it works for when it is played multiple times, and make sure lossTime works as well
   }
@@ -412,6 +417,18 @@
    
    void mouseClicked(){
      if(currentState.equals("start") && ((mouseX >= 275 && mouseX <= 525) && (mouseY >= 575 && mouseY <= 650))){
+       currentState = "game";
+       file.stop();
+       startTime = millis();
+     }
+     if(currentState.equals("start") && ((mouseX >= 700 && mouseX <= 775) && (mouseY >= 25 && mouseY <= 100))){
+       currentState = "settings";
+       System.out.println("changed mode");
+       file.stop();
+       startTime = millis();
+     }
+     //update this to click the "go back" button
+     if(currentState.equals("settings") && ((mouseX >= 275 && mouseX <= 525) && (mouseY >= 575 && mouseY <= 650))){
        currentState = "game";
        file.stop();
        startTime = millis();
