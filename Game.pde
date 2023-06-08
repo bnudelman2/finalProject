@@ -20,8 +20,6 @@
     size(800, 800);
     file = new SoundFile(this, "intro.mp3");
     file.loop();
-    //file.playFor(100.0);
-    //initial 4x4 grid size
     squares = new square[4][4];
     randomSquare(2);
     randomSquare(2);
@@ -83,28 +81,26 @@
   void drawEndScreen(){
     PImage bkg = loadImage("gameOver.jpeg");
     background(bkg);
-    fill(#d6c9bf);
+    fill(#FFFF33);
     rect(615, 30, 150, 45);
+    rect(143, 30, 150, 45);
+    rect(400, 100, 150, 45);
     PFont font1;
     font1 = loadFont("Skia-Regular_Bold-48.vlw");
     textFont(font1, 40);
     text("SCORE", 475, 65);
+    text("BEST", 30, 65);
+    text("TIME", 283, 135);
     font1 = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
     fill(#3B3334);
     text(score, 678 - 11.5 * (int)(log(score) / log(10)), 61);
-    fill(#d6c9bf);
-    rect(143, 30, 150, 45);
-    font1 = loadFont("Skia-Regular_Bold-48.vlw");
-    textFont(font1, 40);
-    text("BEST", 30, 65);
-    font1 = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
-    fill(#3B3334);
     if(score > bestScore){
       text(score, 206 - 11.5 * (int)(log(score) / log(10)), 61);
     }
     else{
       text(bestScore, 206 - 11.5 * (int)(log(bestScore) / log(10)), 61);
     }
+    text(lossTime, 466 - 11.5 * (int)(log(lossTime) / log(10)), 131);
     PFont font;
     font = loadFont("Skia-Regular_Bold-48.vlw");
     stroke(#FFFF33);
@@ -116,14 +112,6 @@
     textFont(font,75);
     fill(0,0,0);
     text("Try Again", 230, 713);
-    fill(#d6c9bf);
-    rect(400, 100, 150, 45);
-    font1 = loadFont("Skia-Regular_Bold-48.vlw");
-    textFont(font1, 40);
-    text("TIME", 287, 135);
-    font1 = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
-    fill(#3B3334);
-    text(lossTime, 466 - 11.5 * (int)(log(lossTime) / log(10)), 131);
   }
   
   void drawSettingsScreen(){
