@@ -100,7 +100,7 @@
     font1 = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
     fill(#3B3334);
     if(score > bestScore){
-      text(score, 206 - 11.5 * (int)(log(bestScore) / log(10)), 61);
+      text(score, 206 - 11.5 * (int)(log(score) / log(10)), 61);
     }
     else{
       text(bestScore, 206 - 11.5 * (int)(log(bestScore) / log(10)), 61);
