@@ -1,9 +1,7 @@
   import java.util.ArrayList;  //<>//
   import processing.sound.*;
   square[][] squares;
-  //String[] mode = new String[]{ "regular", "normal"}; //add more modes
   String[] state = new String[]{ "start", "settings", "game", "lose"};
-  //String currentMode;
   String currentState = state[0];
   SoundFile file;
   PVector dir; // to keep track of direction to know in which direction to combine squares
@@ -13,11 +11,11 @@
   int currentBarrierTime = 1000;
   int currentTime = 0;
   int lossTime = 0;
-  //represents the several possible modes
-  //PUT START AND END IN SEPARATE CLASSES and make non-draw methods that invoke a draw function like rect
-  //ADD A RULES PAGE IN THE START MENU AS WELL
-  //IMPLEMENT TIMED MODE (with a separate timer class) WHERE YOU HAVE A CERTAIN TIME TO REACH A CERTAIN SCwORE AND ALSO IMPLEMENT A LEVEL PAGE TO CHOOSE THOSE TIMES OR A TIME CHOOSING OPTION
-  //add a reset method for when "try again" is clicked
+  color[] norm = new color[]{#d6c9bf, #E2D5BD, #EDE0C8, #f2b179, #f59563, #f67c5f, #f65e3b, #edcf72, #edcc61, #edc850, #edc53f, #edc22e, #776365};
+  color[] colorSet = new color[]{#d6c9bf, #E2D5BD, #EDE0C8, #f2b179, #f59563, #f67c5f, #f65e3b, #edcf72, #edcc61, #edc850, #edc53f, #edc22e, #776365};
+  color[] blueSet = new color[]{#d6c9bf, #e4f0f6, #bcd9ea, #8bbdd9, #5ba4cf, #298fca, #0079bf, #026aa7, #055a8c, #094c72, #0c3953, #5F9EA0, #088F8F};
+  color[] pinkSet = new color[]{#d6c9bf, #fef2f9, #fcdef0, #fac6e5, #ffb0e1, #ff95d6, #ff80ce, #FF00FF, #FF00FF, #e76eb1, #cd5a91, #b44772, #96304c};
+  
   void setup(){
     size(800, 800);
     file = new SoundFile(this, "intro.mp3");
@@ -33,6 +31,9 @@
     if(currentState.equals("start")){
       drawStartScreen();
     }
+    if(currentState.equals("settings")){
+      drawSettingsScreen();
+    }
     else if(currentState.equals("game")){
       background(#f3f0ed);
       drawSquares();
@@ -42,9 +43,6 @@
     else if(currentState.equals("lose")){
       drawEndScreen();
     }
-    //if(isLoop){
-    //  System.out.print("noloop");
-    //}
   }
   
   void drawStartScreen(){
@@ -77,8 +75,9 @@
     PImage settingsIcon = loadImage("settings.png");
     fill(255,255,255);
     strokeWeight(10);
+    stroke(0,0,0);
     rect(700,25,75,75);
-    image(settingsIcon, 700, 25, 75, 75); //change size and location
+    image(settingsIcon, 700, 25, 75, 75);
   }
   
   void drawEndScreen(){
@@ -100,10 +99,52 @@
     text("Try Again", 230, 713);
   }
   
+  void drawSettingsScreen(){
+    background(#f3f0ed);
+    PFont font = loadFont("Skia-Regular_Bold-48.vlw");
+    textFont(font,75);
+    fill(0,0,0);
+    text("Help", 310, 75);
+    PImage rule1 = loadImage("rule1.png");
+    image(rule1, 30, 125, 150, 150);
+    PFont font1 = loadFont("BanglaMN-48.vlw");
+    textFont(font1, 25);
+    text("Use the arrow keys to move all the squares\non the board in a specific direction. It is\npossible for some squares to move and\nothers to have no spaces to move to.", 205, 150);
+    PImage rule2 = loadImage("rule2.png");
+    image(rule2, 30, 305, 150, 150);
+    text("Your objective is to combine like squares\nto get the highest number possible, all the\nwhile increasing your points in the smallest\ntime possible.", 205, 330);
+    textFont(font1, 25);
+    text("C\nO\nL\nO\nR\nW\nA\nY", 30, 515);
+    PImage pink = loadImage("pinkPalette.png");
+    PImage blue = loadImage("bluePalette.png");
+    strokeWeight(2);
+    rect(300, 500, 450, 100);
+    image(pink, 300, 500, 450, 100);
+    rect(300, 650, 450, 100);
+    image(blue, 300, 650, 450, 100);
+    fill(#ffffe4);
+    stroke(#ffffe4);
+    strokeCap(ROUND);
+    strokeJoin(ROUND);
+    strokeWeight(15);
+    rect(125,530,100,50);
+    rect(125,680,100,50);
+    rect(25,25,175,50);
+    fill(#FF0000);
+    stroke(#FF0000);
+    rect(690, 25, 80, 80);
+    textFont(font, 25);
+    fill(0,0,0);
+    text("Pink", 148, 565);
+    text("Blue", 148, 715);
+    textFont(font, 35);
+    text("GO BACK", 35, 63);
+    textFont(font, 25);
+    text("RESET", 693, 75);
+  }
+  
   void drawSquares(){
     //IMPORTANT: THIS ONlY WORKS UP TO 4096 SO FAR
-    color[] colorSet = new color[]
-    {#d6c9bf, #E2D5BD, #EDE0C8, #f2b179, #f59563, #f67c5f, #f65e3b, #edcf72, #edcc61, #edc850, #edc53f, #edc22e, #776365};
     for (int i = 0; i < squares.length; i++){
       for (int z = 0; z < squares[0].length; z++){
         stroke(#c0ac9c);
@@ -423,20 +464,24 @@
      }
      if(currentState.equals("start") && ((mouseX >= 700 && mouseX <= 775) && (mouseY >= 25 && mouseY <= 100))){
        currentState = "settings";
-       System.out.println("changed mode");
        file.stop();
-       startTime = millis();
      }
-     //update this to click the "go back" button
-     if(currentState.equals("settings") && ((mouseX >= 275 && mouseX <= 525) && (mouseY >= 575 && mouseY <= 650))){
-       currentState = "game";
-       file.stop();
-       startTime = millis();
+     if(currentState.equals("settings") && ((mouseX >= 25 && mouseX <= 200) && (mouseY >= 25 && mouseY <= 75))){
+       currentState = "start";
+       file.play();
+     }
+     if(currentState.equals("settings") && ((mouseX >= 690 && mouseX <= 770) && (mouseY >= 25 && mouseY <= 105))){
+       colorSet = norm;
+     }
+     if(currentState.equals("settings") && ((mouseX >= 125 && mouseX <= 225) && (mouseY >= 530 && mouseY <= 580))){
+       colorSet = pinkSet;
+     }
+     if(currentState.equals("settings") && ((mouseX >= 125 && mouseX <= 225) && (mouseY >= 680 && mouseY <= 730))){
+       colorSet = blueSet;
      }
      if(currentState.equals("lose") && ((mouseX >= 275 && mouseX <= 525) && (mouseY >= 650 && mouseY <= 725))){
        reset();
        currentState = "start";
        file.play();
      }
-     //add more for when other modes are in play if needed, as needed
    }
