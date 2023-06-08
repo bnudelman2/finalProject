@@ -81,11 +81,30 @@
   }
   
   void drawEndScreen(){
-    //ADD A "YOUR SCORE: X" at the top and Best score both here and in game
-    //ADD a loss noise
-    //CHANGE BACKGROUND IMAGE
     PImage bkg = loadImage("gameOver.jpeg");
     background(bkg);
+    fill(#d6c9bf);
+    rect(615, 30, 150, 45);
+    PFont font1;
+    font1 = loadFont("Skia-Regular_Bold-48.vlw");
+    textFont(font1, 40);
+    text("SCORE", 475, 65);
+    font1 = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
+    fill(#3B3334);
+    text(score, 678 - 11.5 * (int)(log(score) / log(10)), 61);
+    fill(#d6c9bf);
+    rect(143, 30, 150, 45);
+    font1 = loadFont("Skia-Regular_Bold-48.vlw");
+    textFont(font1, 40);
+    text("BEST", 30, 65);
+    font1 = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
+    fill(#3B3334);
+    if(score > bestScore){
+      text(score, 206 - 11.5 * (int)(log(bestScore) / log(10)), 61);
+    }
+    else{
+      text(bestScore, 206 - 11.5 * (int)(log(bestScore) / log(10)), 61);
+    }
     PFont font;
     font = loadFont("Skia-Regular_Bold-48.vlw");
     stroke(#FFFF33);
