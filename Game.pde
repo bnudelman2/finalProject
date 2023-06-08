@@ -116,6 +116,14 @@
     textFont(font,75);
     fill(0,0,0);
     text("Try Again", 230, 713);
+    fill(#d6c9bf);
+    rect(400, 100, 150, 45);
+    font1 = loadFont("Skia-Regular_Bold-48.vlw");
+    textFont(font1, 40);
+    text("TIME", 287, 135);
+    font1 = loadFont("BodoniSvtyTwoITCTT-Bold-48.vlw");
+    fill(#3B3334);
+    text(lossTime, 466 - 11.5 * (int)(log(lossTime) / log(10)), 131);
   }
   
   void drawSettingsScreen(){
@@ -240,7 +248,6 @@
     else{
       text(currentTime, 465 - 11.5 * (int)(log(currentTime) / log(10)), 730);
     }
-    //make sure it works for when it is played multiple times, and make sure lossTime works as well
   }
   
   void postMove(){
@@ -260,10 +267,6 @@
     randomSquare(0);
     
     if(checkLoss()) {
-      //int currentTime = millis();
-      //while(millis() - currentTime < 5000){
-      //}
-      //make it display lost configuration before loss, fix bug
       lossTime = currentTime;
       currentState = "lose";
     }
