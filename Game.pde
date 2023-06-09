@@ -159,7 +159,7 @@
   }
   
   void drawSquares(){
-    //IMPORTANT: THIS ONlY WORKS UP TO 4096 SO FAR
+    //IMPORTANT: THIS ONlY WORKS UP TO 4096
     for (int i = 0; i < squares.length; i++){
       for (int z = 0; z < squares[0].length; z++){
         stroke(#c0ac9c);
